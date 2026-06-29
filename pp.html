@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PyarGuru</title>
+
+<style>
+:root {
+  --primary:#4A6FFF;
+  --secondary:#7B4DFF;
+  --white:#fff;
+  --light:#f5f7ff;
+  --dark:#1a1a2e;
+  --radius:12px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
+
+body{background:var(--light);color:var(--dark);}
+
+/* NAV */
+.navbar{
+display:flex;justify-content:space-between;align-items:center;
+padding:1rem 2rem;background:white;position:sticky;top:0;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);z-index:10;
+}
+
+.navbar a{margin:0 10px;text-decoration:none;color:var(--dark);}
+
+/* HERO */
+.hero{
+height:90vh;
+background:linear-gradient(135deg,var(--primary),var(--secondary));
+color:white;display:flex;align-items:center;justify-content:center;
+text-align:center;flex-direction:column;
+}
+
+.search-form select, .search-form button{
+padding:10px;margin:5px;border:none;border-radius:var(--radius);
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;padding:2rem;
+}
+
+/* CARD */
+.card{
+background:white;padding:1rem;border-radius:var(--radius);
+box-shadow:0 10px 20px rgba(0,0,0,0.08);
+transition:.3s;
+}
+.card:hover{transform:translateY(-5px);}
+
+/* BUTTON */
+button{
+background:var(--primary);color:white;border:none;
+padding:10px 15px;border-radius:var(--radius);cursor:pointer;
+}
+
+/* SECTION */
+section{padding:3rem 2rem;}
+
+/* CHAT */
+.chat-box{
+position:fixed;bottom:20px;right:20px;width:300px;
+background:white;border-radius:var(--radius);
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+overflow:hidden;
+}
+.chat-messages{height:200px;overflow:auto;padding:10px;}
+.chat-input{display:flex;}
+.chat-input input{flex:1;padding:10px;border:none;}
+.chat-input button{border-radius:0;}
+
+/* MODAL */
+.modal{
+display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.5);justify-content:center;align-items:center;
+}
+.modal-content{
+background:white;padding:2rem;border-radius:var(--radius);
+width:300px;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+.navbar{flex-direction:column;}
+.hero{height:auto;padding:2rem;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<header class="navbar">
+<h2>PyarGuru</h2>
+<nav>
+<a href="#">Home</a>
+<a href="#">Matches</a>
+<a href="#">Vendors</a>
+<a href="#">Honeymoon</a>
+<a href="#" onclick="openModal()">Login</a>
+</nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+<h1>Find Your Perfect Match ❤️</h1>
+<p>Trusted Matrimony Platform</p>
+
+<form class="search-form" onsubmit="searchMatch(event)">
+<select required><option value="">Looking for</option><option>Bride</option><option>Groom</option></select>
+<select required><option value="">Age</option><option>18-25</option><option>25-35</option></select>
+<button>Search</button>
+</form>
+</section>
+
+<!-- MATCHES -->
+<section>
+<h2>Featured Profiles</h2>
+<div class="grid">
+<div class="card"><h3>Rahul, 28</h3><p>Engineer</p><button>View</button></div>
+<div class="card"><h3>Anita, 25</h3><p>Designer</p><button>View</button></div>
+</div>
+</section>
+
+<!-- FILTER -->
+<section>
+<h2>Advanced Filters</h2>
+<select id="ageFilter"><option>Any</option><option>25</option></select>
+<button onclick="applyFilter()">Apply</button>
+</section>
+
+<!-- STORIES -->
+<section>
+<h2>Success Stories 💍</h2>
+<div class="card">"We found love on PyarGuru!"</div>
+</section>
+
+<!-- SERVICES -->
+<section>
+<h2>Wedding Services</h2>
+<div class="grid">
+<div class="card">Photography</div>
+<div class="card">Catering</div>
+<div class="card">Decoration</div>
+</div>
+</section>
+
+<!-- VENDORS -->
+<section>
+<h2>Vendor Marketplace</h2>
+<div class="grid">
+<div class="card">Top Photographer</div>
+<div class="card">Luxury Venue</div>
+</div>
+</section>
+
+<!-- HONEYMOON -->
+<section>
+<h2>Honeymoon Resorts ✈️</h2>
+
+<div class="card">🌴 Maldives Resort - Sponsored</div>
+
+<div class="grid">
+<div class="card">
+<h3>Bali</h3>
+<p>5 Days Package</p>
+<button>Book</button>
+</div>
+<div class="card">
+<h3>Dubai</h3>
+<p>Luxury Stay</p>
+<button>Book</button>
+</div>
+</div>
+
+<form onsubmit="bookTrip(event)">
+<input placeholder="Destination" required>
+<input type="date" required>
+<button>Send Inquiry</button>
+</form>
+</section>
+
+<!-- MEMBERSHIP -->
+<section>
+<h2>Membership Plans</h2>
+<div class="grid">
+<div class="card"><h3>Free</h3><p>Basic access</p></div>
+<div class="card"><h3>Premium</h3><p>$29/month</p></div>
+</div>
+</section>
+
+<!-- DASHBOARD -->
+<section>
+<h2>User Dashboard</h2>
+<div class="card">Profile | Matches | Messages</div>
+</section>
+
+<!-- CONTACT -->
+<section>
+<h2>Contact Us</h2>
+<form onsubmit="contactForm(event)">
+<input placeholder="Name" required>
+<input type="email" placeholder="Email" required>
+<textarea placeholder="Message"></textarea>
+<button>Send</button>
+</form>
+</section>
+
+<!-- CHAT -->
+<div class="chat-box">
+<div class="chat-messages" id="chatMessages"></div>
+<div class="chat-input">
+<input id="chatInput">
+<button onclick="sendMsg()">Send</button>
+</div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<h3>Login</h3>
+<input id="email" placeholder="Email"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
+<button onclick="login()">Login</button>
+</div>
+</div>
+
+<script>
+// SEARCH
+function searchMatch(e){
+e.preventDefault();
+alert("Searching...");
+}
+
+// FILTER
+function applyFilter(){
+alert("Filter Applied");
+}
+
+// CHAT
+function sendMsg(){
+let input=document.getElementById("chatInput");
+if(!input.value) return;
+let msg=document.createElement("div");
+msg.textContent=input.value;
+document.getElementById("chatMessages").appendChild(msg);
+input.value="";
+}
+
+// LOGIN
+function openModal(){
+document.getElementById("modal").style.display="flex";
+}
+
+function login(){
+let email=document.getElementById("email").value;
+let pass=document.getElementById("password").value;
+if(!email || !pass){alert("Fill all fields");return;}
+alert("Login success (demo)");
+}
+
+// CONTACT
+function contactForm(e){
+e.preventDefault();
+alert("Message sent!");
+}
+
+// BOOKING
+function bookTrip(e){
+e.preventDefault();
+alert("Inquiry sent!");
+}
+</script>
+
+</body>
+</html>
